@@ -10,12 +10,15 @@ From: nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
 %runscript
     echo "Container was created"
     echo "Arguments received: $*"
-    exec python3 /infer.py $@
+    mkdir /tmp/scratch_dir
+    cp /infer.py /model.pt /tmp/scratch_dir
+    cd /tmp/scratch_dir
+    python3 infer.py $@
 
 %post 
     export DEBIAN_FRONTEND=noninteractive 
 
-    apt-get -qq -y update 
+    apt-get -qq -y update
 
     apt-get install -y python3.10 python3.10-distutils python3-pip python3-wheel
     python3 -m pip install --upgrade pip
